@@ -1,0 +1,58 @@
+<---------------mongoose-aggregate-paginate-v2--------------------> 
+
+ek plugin hai jo aggregation pipeline ke result ko pages mein baant deta hai (pagination).
+
+<----------------Pagination kya hota hai?--------------------->
+
+Maan lo tumhare paas 10,000 videos hain. Sab ek saath frontend ko bhejoge toh app slow ho jayega. Isliye hum data chhote tukdon (pages) mein bhejte hain, jaise page 1 mein 10 videos, page 2 mein agle 10, aur aise hi aage.
+
+----------------Yeh package kyu chahiye?------------------------
+
+Mongoose mein normal find() ke liye mongoose-paginate-v2 hota hai. Lekin jab tum aggregate() use karte ho (lookup, match, group, sort jaise stages), toh wahan wo kaam nahi karta. Aggregate mein skip aur limit haath se lagane padte, aur total count alag se nikalna padta. Yeh package yeh sab kaam ek hi function mein kar deta hai.
+
+Tumhare project mein watchHistory ya Video ke saath $lookup use hoga, isliye yeh kaam aayega. */
+
+
+
+
+<------------------------- JWT kya hai?----------------------->
+
+JWT (JSON Web Token) ek digital pass jaisa hai. Jab user login karta hai, server usse ek token deta hai. Uske baad user har request ke saath yeh token bhejta hai, aur server token dekhke pehchaan leta hai ki "yeh wahi user hai jo login kar chuka hai". Isse server ko har baar password nahi mangna padta.
+
+jsonwebtoken woh npm package hai jisse Node.js mein JWT banate (sign) aur check (verify) karte hain.
+
+JWT ke andar kya hota hai?
+
+Token ke 3 hisse hote hain, dot (.) se alag:
+
+xxxxx.yyyyy.zzzzz
+header.payload.signature
+Hissa	Kya hota hai
+Header	Algorithm aur token type (jaise HS256)
+Payload	Data jo tum daalte ho (_id, email, username)
+Signature	Secret key se bani hui mohar. Isse pata chalta hai token badla nahi gaya */
+
+
+
+<-------------------pre() hook kya hai?--------------------->
+
+pre() hook ek Mongoose middleware hai jo kisi action se pehle automatically chal jata hai. Jaise save() hone se pehle password hash karna, ya data check karna. Isko "database mein jaane se pehle ka security check" samajh lo.
+
+javascript
+schema.pre("event", function (next) {
+    // jo kaam pehle karna hai
+    next();
+});
+
+....Kyu use karte hain? ........................................>
+
+Har controller mein wahi kaam baar baar likhne ki jagah ek baar schema mein likh do, aur woh har save() par khud chal jayega. Tumne isi liye bcrypt wala hash pre("save") mein lagaya tha.
+
+Syntax breakdown
+javascript
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
