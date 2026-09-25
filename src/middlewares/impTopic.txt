@@ -1,0 +1,31 @@
+----------Middleware kya hai?-----------------
+
+Middleware ek function hai jo request aur response ke beech mein baith ke kaam karta hai. Jab client (browser/app) request bhejta hai aur server response deta hai, uske beech mein middleware chalta hai aur request ko check/modify karta hai.
+
+Socho ek security guard hai company ke gate par. Har employee (request) ko andar jaane se pehle guard check karta hai — ID card hai ya nahi, allowed hai ya nahi. Tabhi andar (controller tak) jaane dega.
+
+--Client → Middleware1 → Middleware2 → Controller → Response
+
+-----------Middleware ka syntax-------------------
+
+const myMiddleware = (req, res, next) => {
+    console.log("Request aayi:", req.url);
+    next();   // agle step par jao
+}
+
+app.use(myMiddleware);
+
+next() sabse zaroori hai. Yeh call nahi kiya toh request wahin atak jayegi, aage controller tak jayegi hi nahi.
+
+---------------------Kyu use karte hain?
+
+Har route mein baar baar wahi kaam likhne ki jagah, ek jagah likh do aur woh automatically chal jaye. 
+
+
+<----------------Multer kya hai?------------------>
+
+Multer ek middleware hai jo file upload handle karta hai (images, videos, PDFs). Express khud files handle nahi kar sakta — normal req.body sirf text data (JSON) samajhta hai, files nahi. Multer yeh gap bharta hai.
+
+Kaise kaam karta hai
+
+Multer file ko temporarily local server par save kar deta hai, phir tum usse Cloudinary jaise service par upload karte ho.
