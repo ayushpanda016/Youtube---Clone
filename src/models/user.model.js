@@ -49,11 +49,12 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
     if(!this.isModifie("password")) return next();
-    this.password = bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
     next()
 })
 
 // login ke time: user ka diya plain password DB ke hashed password se match karta hai (true/false)
+
 userSchema.methods.isPasswordCorrect = async function (password){
     // bcrypt.compare(plain password, DB ka hashed password) -> true ya false
     return await bcrypt.compare(password, this.password )
